@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 
 class Program
 {
@@ -42,5 +43,34 @@ class Program
         }
 
         Console.WriteLine($"The max is: {max}");
+        
+        // Stretch 
+        int smallestPositive = int.MaxValue;
+        foreach (int number in numbers)
+        {
+            if (number > 0 && number < smallestPositive)
+            {
+                smallestPositive = number;
+            }
+        }
+
+        // Handle exception if least is empty or user enters negative numbers only 
+        if (smallestPositive == int.MaxValue)
+        {
+            Console.WriteLine("No positive number found.");
+        }
+        else
+        {
+            Console.WriteLine($"The smallest positive number is: {smallestPositive}");
+        }
+
+        // Arrange numbers from smallest to largest
+        numbers.Sort();
+
+        Console.WriteLine("The sorted list is:");
+        foreach (int number in numbers)
+        {
+            Console.WriteLine(number);
+        }
     }   
 }
