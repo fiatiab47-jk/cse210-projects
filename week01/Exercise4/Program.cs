@@ -16,7 +16,7 @@ class Program
             Console.Write("Enter number: ");
             userNumber = int.Parse(Console.ReadLine());
 
-            if (userNumber != 0) ;
+            if (userNumber != 0)
             {
                 numbers.Add(userNumber);
             }
@@ -29,7 +29,7 @@ class Program
         }
         Console.WriteLine($"The sum is: {sum}");
 
-        double average = (double)sum / numbers.Count;
+        float average = ((float)sum) / numbers.Count;
         Console.WriteLine($"The average is: {average}");
 
         int max = numbers[0];
