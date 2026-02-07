@@ -1,6 +1,5 @@
 using System;
-using System;
-using System.Runtime.CompilerServices;
+using System.Collections.Generic;
 
 public class ReflectingActivity : Activity
 {
@@ -100,7 +99,7 @@ public class ReflectingActivity : Activity
 
         // Clear the console before questions
         Console.Clear();
-        
+
     }
 
 
