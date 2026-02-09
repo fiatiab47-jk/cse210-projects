@@ -15,9 +15,11 @@ public class BreathingActivity : Activity
         int elapsed = 0;
         while (elapsed < _duration)
         {
-            Console.WriteLine("\nBreathe in... ");
+            Console.Write("\nBreathe in... ");
             ShowCountDown(6);
             elapsed += 6;
+            // Prints on a  new line
+            Console.WriteLine("");
 
             if (elapsed >= _duration)
                 break;

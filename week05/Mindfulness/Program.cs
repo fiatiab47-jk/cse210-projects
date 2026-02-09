@@ -38,7 +38,8 @@ class Program
             }
             else if (choice == "3")
             {
-
+                ListingActivity activity = new ListingActivity();
+                activity.Run();
             }
             else if (choice == "4")
             {

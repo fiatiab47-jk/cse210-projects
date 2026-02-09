@@ -80,7 +80,7 @@ public class ReflectingActivity : Activity
 
 
     // Displays a random prompt to the console
-    public void DisplayPrompt()
+    private void DisplayPrompt()
     {
         // Display the instruction to the user
         Console.WriteLine("Consider the following prompt:\n");
