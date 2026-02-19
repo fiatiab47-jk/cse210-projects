@@ -3,8 +3,10 @@ using System;
 
 public class SimpleGoal : Goal
 {
-    private bool _isComplete;
+    private bool _isComplete;   // Tracks if goal has been completed
 
+
+// Simple Goal initializer 
     public SimpleGoal(string name, string description, int points)
     : base(name, description, points)
     {
@@ -14,23 +16,24 @@ public class SimpleGoal : Goal
 
     public override int RecordEvent()
     {
-        if (_isComplete)
+        // only allow completion once
+        if (!_isComplete)
         {
-            // prevent double scoring
-            return 0;
+            _isComplete = true; // Mark complete
+            return _points;
         }
-        _isComplete = true;
-        return _points;
+        return 0;       // If already complete no points 
     }
-    
 
-    public override bool IsComplete()
-    {
-        return _isComplete;
-    }
+
+    // Return completion status
+    public override bool IsComplete() => _isComplete;
+    
 
     public override string GetStringRepresentation()
     {
+        // Format:
+        // SimpleGoal|shortName|description|points|isComplete
         return $"SimpleGoal|{_shortName}|{_description}|{_points}|{_isComplete}";
     }
 }

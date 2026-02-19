@@ -1,16 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
+using System;                      // Allows basic system functionality
+using System.Collections.Generic;  // Allows use of List<T>
+using System.IO;                   // Allows file reading and writing   
 
 public class GoalManager
 {
-    private List<Goal> _goals;
-    private int _score;
+    private List<Goal> _goals;  // List of all goals
+    private int _score;         // Player score
 
     public GoalManager()
     {
-        _goals = new List<Goal>();
-        _score = 0;
+        _goals = new List<Goal>();  // Initialize empty list
+        _score = 0;                 // Start score at zero
     }
     
     // Display initial score
@@ -35,7 +35,7 @@ public class GoalManager
             Console.WriteLine("5. Record Event");
             Console.WriteLine("6. Quit");
 
-            Console.Write("Select a choice form the menu: ");
+            Console.Write("Select a choice from the menu: ");
             choice = int.Parse(Console.ReadLine());
 
             switch (choice)
@@ -43,19 +43,12 @@ public class GoalManager
                 case 1: CreateGoal(); break;
                 case 2: ListGoalDetails(); break;
                 case 3: SaveGoals(); break;
-                // case 4: LoadGoals(); break;
+                case 4: LoadGoals(); break;
                 case 5: RecordEvent(); break;
             }
         }
     }
 
-    public void ListGoalDetails()
-    {
-        for (int i = 0; i < _goals.Count; i++)
-        {
-            Console.WriteLine($"{i + 1}. {_goals[i].GetDetailsString()}");
-        }
-    }
 
     public void CreateGoal()
     {
@@ -96,6 +89,14 @@ public class GoalManager
         }
     }
 
+    public void ListGoalDetails()
+    {
+        for (int i = 0; i < _goals.Count; i++)
+        {
+            Console.WriteLine($"{i + 1}. {_goals[i].GetDetailsString()}");
+        }
+    }
+
     public void RecordEvent()
     {
         ListGoalDetails();
@@ -103,7 +104,9 @@ public class GoalManager
         Console.Write("Which goal did you accomplish? ");
         int index = int.Parse(Console.ReadLine()) - 1;
 
+        // Polymorphism happens here 
         int earned = _goals[index].RecordEvent();
+        // Add earned points to total score
         _score += earned;
 
         Console.WriteLine($"Congratulations! You earned {earned} points!");
@@ -113,59 +116,80 @@ public class GoalManager
     public void SaveGoals()
     {
         Console.Write("What is the filename for the goal file? ");
-        string file = Console.ReadLine();
+        string filename = Console.ReadLine();
 
-        using (StreamWriter writer = new StreamWriter(file))
+        using (StreamWriter writer = new StreamWriter(filename))
         {
-            writer.WriteLine(_score);
+            //Save score first 
+            writer.WriteLine($"Score: {_score}");
             foreach (Goal goal in _goals)
             {
+                // Each goal writes itself int its own format
                 writer.WriteLine(goal.GetStringRepresentation());
             }
         }
+        Console.WriteLine("Goals saved successfully.");
     }
 
 
     public void LoadGoals()
     {
-        Console.Write("Filename? ");
-        string file = Console.ReadLine();
+        Console.Write("Enter Filename: ");
+        string filename = Console.ReadLine();
 
-        string[] lines = File.ReadAllLines(file);
-        _goals.Clear();
-        _score = int.Parse(lines[0]);
-
-        for (int i = 1; i < lines.Length; i++)
+        if (!File.Exists(filename))
         {
-            string[] parts = lines[i].Split("|");
-            if (parts[0] == "SimpleGoal")
+            Console.WriteLine("File not found.");
+            return;
+        }
+
+        // Reads the entire file into array of lines
+        string[] lines = File.ReadAllLines(filename);
+        // Clear current goals
+        _goals.Clear();
+
+        foreach(string line in lines)
+        {
+            if (line.StartsWith("Score:"))
             {
-                var goal = new SimpleGoal(parts[1], parts[2], int.Parse(parts[3]));
-                if (bool.Parse(parts[4]))
-                    goal.RecordEvent();
-                _goals.Add(goal);
+                // split at ':' and take second part as score
+                _score = int.Parse(line.Split(':')[1]);
             }
-            else if (parts[0] == "EternalGoal")
+            else
             {
-                _goals.Add(new EternalGoal(parts[1], parts[2], int.Parse(parts[3])));
-            }
-            else if (parts[0] == "ChecklistGoal")
-            {
-                var goal = new ChecklistGoal(
-                    parts[1],
-                    parts[2],
-                    int.Parse(parts[3]),
-                    int.Parse(parts[4]),
-                    int.Parse(parts[5])
-                );
+                // Split goal line into pieces
+                string[] parts = line.Split('|');
 
-                for (int j = 0; j < int.Parse(parts[6]); j++)
-                    goal.RecordEvent();
+                string type = parts[0];
 
-                _goals.Add(goal);
+                if (type == "SimpleGoal")
+                {
+                    SimpleGoal goal = new SimpleGoal(parts[1], parts[2], int.Parse(parts[3]));
+                    if (bool.Parse(parts[4]))
+                        // restore completion
+                        goal.RecordEvent();
+                    _goals.Add(goal);
+                }
+                else if (type == "EternalGoal")
+                {
+                    _goals.Add(new EternalGoal(parts[1], parts[3], int.Parse(parts[3])));
+                }
+                else if (type == "ChecklistGoal")
+                {
+                    ChecklistGoal goal = new ChecklistGoal(parts[1], parts[2],
+                    int.Parse(parts[3]), int.Parse(parts[4]), int.Parse(parts[5]));
 
+                    int completed = int.Parse(parts[6]);
+                    for (int i = 0; i < completed; i++)
+                    {
+                        // Rebuild progress
+                        goal.RecordEvent();
+                    }
+                    _goals.Add(goal);
+                }
             }
         }
+        Console.WriteLine("Goals loaded successfully.");
     }
 
 }

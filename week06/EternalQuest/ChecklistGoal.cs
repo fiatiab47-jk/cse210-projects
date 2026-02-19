@@ -2,18 +2,17 @@ using System;
 
 public class ChecklistGoal : Goal
 {
-    private int _amountCompleted;
-    private int _target;
-    private int _bonus;
+    private int _amountCompleted;   // Times completed so far
+    private int _target;            // Required completions      
+    private int _bonus;             // Bonus when completed fully
 
-
+    // Initialize that state of CheckListGoal object
     public ChecklistGoal(string name, string description, int points, int target, int bonus)
         : base(name, description, points)
     {
-        _target = target;
-        _bonus = bonus;
-        // Starts progress at zero
-        _amountCompleted = 0;
+        _target = target;       // Set target count
+        _bonus = bonus;         // Set bonus 
+        _amountCompleted = 0;   // Start at zero completions
     }
 
 
@@ -24,21 +23,18 @@ public class ChecklistGoal : Goal
             // Prevent over scoring
             return 0;
         }
-        _amountCompleted++;
+        _amountCompleted++;  // Increase completion count
 
         if (_amountCompleted == _target)
         {
-            // final bonus
-            return _points + _bonus;
+            return _points + _bonus;    // final bonus
         }
-        return _points;   
+        return _points;     // Otherwise normal points
     }
 
 
-    public override bool IsComplete()
-    {
-        return _amountCompleted >= _target;
-    }
+    public override bool IsComplete() =>
+        _amountCompleted >= _target;   // Complete if target reached
 
     public override string GetDetailsString()
     {
@@ -46,8 +42,6 @@ public class ChecklistGoal : Goal
         return $"{status} {_shortName} ({_description}) -- Completed {_amountCompleted}/{_target}";
     }
 
-    public override string GetStringRepresentation()
-    {
-        return$"ChecklistGoal|{_shortName}|{_description}|{_points}|{_bonus}|{_target}|{_amountCompleted}";
-    }
+    public override string GetStringRepresentation() =>
+        $"ChecklistGoal|{_shortName}|{_description}|{_points}|{_target}|{_bonus}|{_amountCompleted}";
 }

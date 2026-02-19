@@ -1,27 +1,24 @@
+// Allows basic system functionality (Console, etc.)
 using System;
 
 public class EternalGoal : Goal
 {
+    // Initializes the state of the Eternal goal object
     public EternalGoal(string name, string description, int points)
         : base(name, description, points)
     {
-
     }
 
-    public override int RecordEvent()
-    {
-        // always award points
-        return _points;
-    }
+    // always award points
+    public override int RecordEvent() => _points;
+    
 
-    public override bool IsComplete()
-    {
-        // Eternal goals never complete
-        return false;
-    }
+    // Eternal goals are never complete
+    public override bool IsComplete() => false;
 
-    public override string GetStringRepresentation()
-    {
-        return $"Eternal|{_shortName}|{_description}|{_points}";
-    }
+
+    // Returns the format of Eternal Goal
+    public override string GetStringRepresentation() =>
+        $"Eternal|{_shortName}|{_description}|{_points}";
+   
 }
