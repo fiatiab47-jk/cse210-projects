@@ -19,6 +19,6 @@ public class EternalGoal : Goal
 
     // Returns the format of Eternal Goal
     public override string GetStringRepresentation() =>
-        $"Eternal|{_shortName}|{_description}|{_points}";
+        $"EternalGoal|{_shortName}|{_description}|{_points}";
    
 }

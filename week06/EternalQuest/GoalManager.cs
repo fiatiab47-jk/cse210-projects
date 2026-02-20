@@ -172,7 +172,7 @@ public class GoalManager
                 }
                 else if (type == "EternalGoal")
                 {
-                    _goals.Add(new EternalGoal(parts[1], parts[3], int.Parse(parts[3])));
+                    _goals.Add(new EternalGoal(parts[1], parts[2], int.Parse(parts[3])));
                 }
                 else if (type == "ChecklistGoal")
                 {
